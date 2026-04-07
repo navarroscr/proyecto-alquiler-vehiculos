@@ -1,4 +1,4 @@
-# Archivo: clase_cliente.py
+# prueba de git hub 
 
 class Cliente:
     """clase clientes"""
