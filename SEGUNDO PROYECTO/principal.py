@@ -6,6 +6,8 @@ import logica.clientes_logica as clientes_logica
 import logica.funcionario_logica as funcionarios_logica
 import logica.vehiculo_logica as vehiculo_logica
 import logica.usuario_logica as usuarios_logica
+import logica.alquiler_logica as alquiler_logica
+import logica.devolucion_logica as devolucion_logica
 
 
 # ==================== MENÚ PRINCIPAL ====================
@@ -16,7 +18,8 @@ def mostrar_menu_principal():
     print("2. Módulo funcionarios")
     print("3. Módulo vehículos")
     print("4. Módulo usuarios")
-    print("5. Salir")
+    print("5. Módulo alquileres")
+    print("6. Salir")
     print("==========================")
 
 
@@ -33,7 +36,6 @@ def mostrar_menu_clientes():
     print("-----------------------")
 
 
-# Pide los datos y crea un cliente nuevo
 def opcion_crear_cliente():
     print("\n-- Crear nuevo cliente --")
     id_cliente = input("Id del cliente: ")
@@ -45,7 +47,6 @@ def opcion_crear_cliente():
     clientes_logica.crear_cliente(id_cliente, nombre, cedula, telefono, correo, direccion)
 
 
-# Muestra todos los clientes registrados
 def opcion_ver_clientes():
     print("\n-- Lista de clientes --")
     lista = clientes_logica.obtener_todos_los_clientes()
@@ -63,7 +64,6 @@ def opcion_ver_clientes():
             print("Estado:", cliente["estado"])
 
 
-# Busca un cliente por su id
 def opcion_buscar_cliente():
     print("\n-- Buscar cliente por id --")
     id_cliente = input("Id del cliente: ")
@@ -81,7 +81,6 @@ def opcion_buscar_cliente():
         print("Estado:", cliente["estado"])
 
 
-# Pide los nuevos datos y actualiza un cliente
 def opcion_actualizar_cliente():
     print("\n-- Actualizar cliente --")
     id_cliente = input("Id del cliente a actualizar: ")
@@ -107,14 +106,12 @@ def opcion_actualizar_cliente():
         clientes_logica.actualizar_cliente(id_cliente, nuevos_datos)
 
 
-# Elimina un cliente por su id
 def opcion_eliminar_cliente():
     print("\n-- Eliminar cliente --")
     id_cliente = input("Id del cliente a eliminar: ")
     clientes_logica.eliminar_cliente(id_cliente)
 
 
-# Controla el submenú de clientes
 def menu_clientes():
     opcion = ""
     while opcion != "6":
@@ -149,7 +146,6 @@ def mostrar_menu_funcionarios():
     print("--------------------------")
 
 
-# Pide los datos y crea un funcionario nuevo
 def opcion_crear_funcionario():
     print("\n-- Crear nuevo funcionario --")
     id_funcionario = input("Id del funcionario: ")
@@ -161,7 +157,6 @@ def opcion_crear_funcionario():
     funcionarios_logica.crear_funcionario(id_funcionario, nombre, cedula, telefono, correo, puesto)
 
 
-# Muestra todos los funcionarios registrados
 def opcion_ver_funcionarios():
     print("\n-- Lista de funcionarios --")
     lista = funcionarios_logica.obtener_todos_los_funcionarios()
@@ -179,7 +174,6 @@ def opcion_ver_funcionarios():
             print("Estado:", funcionario["estado"])
 
 
-# Busca un funcionario por su id
 def opcion_buscar_funcionario():
     print("\n-- Buscar funcionario por id --")
     id_funcionario = input("Id del funcionario: ")
@@ -197,7 +191,6 @@ def opcion_buscar_funcionario():
         print("Estado:", funcionario["estado"])
 
 
-# Pide los nuevos datos y actualiza un funcionario
 def opcion_actualizar_funcionario():
     print("\n-- Actualizar funcionario --")
     id_funcionario = input("Id del funcionario a actualizar: ")
@@ -223,14 +216,12 @@ def opcion_actualizar_funcionario():
         funcionarios_logica.actualizar_funcionario(id_funcionario, nuevos_datos)
 
 
-# Elimina un funcionario por su id
 def opcion_eliminar_funcionario():
     print("\n-- Eliminar funcionario --")
     id_funcionario = input("Id del funcionario a eliminar: ")
     funcionarios_logica.eliminar_funcionario(id_funcionario)
 
 
-# Controla el submenú de funcionarios
 def menu_funcionarios():
     opcion = ""
     while opcion != "6":
@@ -266,7 +257,6 @@ def mostrar_menu_vehiculos():
     print("-----------------------")
 
 
-# Pide los datos y crea un vehículo nuevo
 def opcion_crear_vehiculo():
     print("\n-- Crear nuevo vehículo --")
     id_vehiculo = input("Id del vehículo: ")
@@ -284,7 +274,6 @@ def opcion_crear_vehiculo():
     vehiculo_logica.crear_vehiculo(id_vehiculo, marca, tipo, placa, numero_motor, transmision, combustible, color, cantidad_pasajeros, costo_diario, cantidad_maletas, imagen)
 
 
-# Muestra todos los vehículos registrados
 def opcion_ver_vehiculos():
     print("\n-- Lista de vehículos --")
     lista = vehiculo_logica.obtener_todos_los_vehiculos()
@@ -308,7 +297,6 @@ def opcion_ver_vehiculos():
             print("Estado:", vehiculo["estado"])
 
 
-# Busca un vehículo por su id
 def opcion_buscar_vehiculo():
     print("\n-- Buscar vehículo por id --")
     id_vehiculo = input("Id del vehículo: ")
@@ -332,7 +320,6 @@ def opcion_buscar_vehiculo():
         print("Estado:", vehiculo["estado"])
 
 
-# Busca un vehículo por su placa
 def opcion_buscar_vehiculo_placa():
     print("\n-- Buscar vehículo por placa --")
     placa = input("Placa del vehículo: ")
@@ -356,7 +343,6 @@ def opcion_buscar_vehiculo_placa():
         print("Estado:", vehiculo["estado"])
 
 
-# Pide los nuevos datos y actualiza un vehículo
 def opcion_actualizar_vehiculo():
     print("\n-- Actualizar vehículo --")
     id_vehiculo = input("Id del vehículo a actualizar: ")
@@ -382,14 +368,12 @@ def opcion_actualizar_vehiculo():
         vehiculo_logica.actualizar_vehiculo(id_vehiculo, nuevos_datos)
 
 
-# Elimina un vehículo por su id
 def opcion_eliminar_vehiculo():
     print("\n-- Eliminar vehículo --")
     id_vehiculo = input("Id del vehículo a eliminar: ")
     vehiculo_logica.eliminar_vehiculo(id_vehiculo)
 
 
-# Controla el submenú de vehículos
 def menu_vehiculos():
     opcion = ""
     while opcion != "7":
@@ -427,7 +411,6 @@ def mostrar_menu_usuarios():
     print("----------------------")
 
 
-# Pide los datos y crea un usuario nuevo
 def opcion_crear_usuario():
     print("\n-- Crear nuevo usuario --")
     id_usuario = input("Id del usuario: ")
@@ -437,7 +420,6 @@ def opcion_crear_usuario():
     usuarios_logica.crear_usuario(id_usuario, nombre_usuario, contrasena, tipo_usuario)
 
 
-# Muestra todos los usuarios registrados
 def opcion_ver_usuarios():
     print("\n-- Lista de usuarios --")
     lista = usuarios_logica.obtener_todos_los_usuarios()
@@ -452,7 +434,6 @@ def opcion_ver_usuarios():
             print("Estado:", usuario["estado"])
 
 
-# Busca un usuario por su id
 def opcion_buscar_usuario():
     print("\n-- Buscar usuario por id --")
     id_usuario = input("Id del usuario: ")
@@ -467,7 +448,6 @@ def opcion_buscar_usuario():
         print("Estado:", usuario["estado"])
 
 
-# Busca un usuario por su nombre de usuario
 def opcion_buscar_usuario_nombre():
     print("\n-- Buscar usuario por nombre --")
     nombre_usuario = input("Nombre de usuario: ")
@@ -482,7 +462,6 @@ def opcion_buscar_usuario_nombre():
         print("Estado:", usuario["estado"])
 
 
-# Pide los nuevos datos y actualiza un usuario
 def opcion_actualizar_usuario():
     print("\n-- Actualizar usuario --")
     id_usuario = input("Id del usuario a actualizar: ")
@@ -505,14 +484,12 @@ def opcion_actualizar_usuario():
         usuarios_logica.actualizar_usuario(id_usuario, nuevos_datos)
 
 
-# Elimina un usuario por su id
 def opcion_eliminar_usuario():
     print("\n-- Eliminar usuario --")
     id_usuario = input("Id del usuario a eliminar: ")
     usuarios_logica.eliminar_usuario(id_usuario)
 
 
-# Controla el submenú de usuarios
 def menu_usuarios():
     opcion = ""
     while opcion != "7":
@@ -536,12 +513,54 @@ def menu_usuarios():
             print("Opción no válida, intente de nuevo.")
 
 
+# ==================== SUBMENÚ ALQUILERES ====================
+
+def mostrar_menu_alquileres():
+    print("\n--- MÓDULO ALQUILERES ---")
+    print("1. Registrar alquiler")
+    print("2. Procesar devolución")
+    print("3. Volver al menú principal")
+    print("------------------------")
+
+
+def opcion_registrar_alquiler():
+    print("\n-- Registrar alquiler --")
+    placa = input("Placa del vehículo: ")
+    fecha_inicio = input("Fecha inicio (YYYY-MM-DD): ")
+    fecha_fin = input("Fecha fin (YYYY-MM-DD): ")
+    resultado = alquiler_logica.registrar_alquiler(placa, fecha_inicio, fecha_fin)
+    print(resultado)
+
+
+def opcion_procesar_devolucion():
+    print("\n-- Procesar devolución --")
+    placa = input("Placa del vehículo: ")
+    fecha_real = input("Fecha real devolución (YYYY-MM-DD): ")
+    dano = float(input("Costo de daños (0 si no hay): "))
+    resultado = devolucion_logica.procesar_devolucion(placa, fecha_real, dano)
+    print(resultado)
+
+
+def menu_alquileres():
+    opcion = ""
+    while opcion != "3":
+        mostrar_menu_alquileres()
+        opcion = input("Seleccione una opción: ")
+        if opcion == "1":
+            opcion_registrar_alquiler()
+        elif opcion == "2":
+            opcion_procesar_devolucion()
+        elif opcion == "3":
+            print("Volviendo al menú principal...")
+        else:
+            print("Opción no válida, intente de nuevo.")
+
+
 # ==================== MENÚ PRINCIPAL ====================
 
-# Función principal que mantiene el menú corriendo
 def main():
     opcion = ""
-    while opcion != "5":
+    while opcion != "6":
         mostrar_menu_principal()
         opcion = input("Seleccione una opción: ")
         if opcion == "1":
@@ -553,6 +572,8 @@ def main():
         elif opcion == "4":
             menu_usuarios()
         elif opcion == "5":
+            menu_alquileres()
+        elif opcion == "6":
             print("Saliendo del sistema...")
         else:
             print("Opción no válida, intente de nuevo.")
