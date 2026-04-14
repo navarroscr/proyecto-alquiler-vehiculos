@@ -149,9 +149,8 @@ class Alquiler:
 
     @estado.setter
     def estado(self, value):
-        
-        estados_permitidos = ["activo", "finalizado", "cancelado"]
+        estados_permitidos = ["pendiente", "en prestamo", "finalizado", "cancelado"]
         estado_normalizado = value.strip().lower()
         if estado_normalizado not in estados_permitidos:
-            raise ValueError("El estado debe ser 'activo', 'finalizado' o 'cancelado'.")
+            raise ValueError("El estado debe ser 'pendiente', 'en prestamo', 'finalizado' o 'cancelado'.")
         self._estado = estado_normalizado

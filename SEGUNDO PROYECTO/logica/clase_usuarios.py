@@ -3,7 +3,7 @@
 class Usuario:
     """Clase usuarios."""
 
-    def __init__(self, id_usuario, nombre_usuario, contrasena, tipo_usuario, estado):
+    def __init__(self, id_usuario, nombre_usuario, contrasena, tipo_usuario, estado="activo"):
         """Constructor que inicializa los atributos del usuario."""
         self._id_usuario = id_usuario
         self.nombre_usuario = nombre_usuario  

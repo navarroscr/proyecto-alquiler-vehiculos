@@ -38,7 +38,7 @@ def actualizar_funcionario(id_funcionario, nuevos_datos):
     print("Funcionario actualizado correctamente")
 
 
-# Elimina un funcionario según su id_funcionario
+# Borrado logico 
 def eliminar_funcionario(id_funcionario):
-    funcionarios_datos.eliminar_funcionario(id_funcionario)
-    print("Funcionario eliminado correctamente")
+    funcionarios_datos.actualizar_funcionario(id_funcionario, {"estado": "inactivo"})
+    print("Funcionario desactivado correctamente")

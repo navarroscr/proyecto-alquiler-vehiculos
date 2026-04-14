@@ -3,8 +3,8 @@ import datos.clientes_datos as clientes_datos
 
 
 # crear el objeto cliente como diccionario 
-def crear_cliente(id_cliente, nombre, cedula, telefono, correo, direccion):
-    nuevo_cliente = Cliente(id_cliente, nombre, cedula, telefono, correo, direccion, "activo")
+def crear_cliente(id_cliente, nombre, cedula, telefono, correo, direccion, fecha_nacimiento):
+    nuevo_cliente = Cliente(id_cliente, nombre, cedula, telefono, correo, direccion, fecha_nacimiento, estado="activo")
 
     cliente_diccionario = {
         "id_cliente": nuevo_cliente.id_cliente,
@@ -13,6 +13,7 @@ def crear_cliente(id_cliente, nombre, cedula, telefono, correo, direccion):
         "telefono": nuevo_cliente.telefono,
         "correo": nuevo_cliente.correo,
         "direccion": nuevo_cliente.direccion,
+        "fecha_nacimiento": nuevo_cliente.fecha_nacimiento,
         "estado": nuevo_cliente.estado
     }
 
@@ -38,7 +39,7 @@ def actualizar_cliente(id_cliente, nuevos_datos):
     print("Cliente actualizado correctamente")
 
 
-# Elimina un cliente según su id_cliente
+# Borrado, marca el cliente como inactivo sin eliminarlo de la BD
 def eliminar_cliente(id_cliente):
-    clientes_datos.eliminar_cliente(id_cliente)
-    print("Cliente eliminado correctamente")
+    clientes_datos.actualizar_cliente(id_cliente, {"estado": "inactivo"})
+    print("Cliente desactivado correctamente")

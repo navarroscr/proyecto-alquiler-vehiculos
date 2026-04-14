@@ -3,16 +3,17 @@
 class Cliente:
     """clase clientes"""
 
-    def __init__(self, id_cliente, nombre, cedula, telefono, correo, direccion, estado):
-        """Constructor"""
+    def __init__(self, id_cliente, nombre, cedula, telefono, correo,
+             direccion, fecha_nacimiento, estado="activo"):
         self._id_cliente = id_cliente
-        self.nombre = nombre  
-        self.cedula = cedula  
-        self.telefono = telefono  
-        self.correo = correo  
+        self.nombre = nombre
+        self.cedula = cedula
+        self.telefono = telefono
+        self.correo = correo
         self.direccion = direccion
-        self.estado = estado  
-
+        self.fecha_nacimiento = fecha_nacimiento
+        self.estado = estado
+        
     @property
     def id_cliente(self):
        
@@ -87,3 +88,13 @@ class Cliente:
         if valor not in ["activo", "inactivo"]:
             raise ValueError("El estado debe ser 'activo' o 'inactivo'.")
         self._estado = valor
+    
+    @property
+    def fecha_nacimiento(self):
+        return self._fecha_nacimiento
+
+    @fecha_nacimiento.setter
+    def fecha_nacimiento(self, valor):
+        if not valor or not str(valor).strip():
+            raise ValueError("La fecha de nacimiento no puede estar vacía.")
+        self._fecha_nacimiento = valor  
