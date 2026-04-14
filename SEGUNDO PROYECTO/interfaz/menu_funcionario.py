@@ -1,4 +1,3 @@
-# interfaz/menu_funcionario.py
 import tkinter as tk
 from tkinter import messagebox
 
@@ -43,7 +42,7 @@ class MenuFuncionario:
         tk.Button(self.root, text="Cerrar sesión", width=25,
                   command=self.cerrar_sesion).pack(pady=(15, 0))
 
-    # ── Navegación ──────────────────────────────────────────────
+    # ── Navegación ─────────────────
 
     def abrir_clientes(self):
         from interfaz.clientes import VentanaClientes
@@ -82,7 +81,7 @@ class MenuFuncionario:
             self.root.destroy()
 
 
-# ── Punto de entrada temporal (para probar sin login) ──────────
+# ── Punto de entrada temporal
 if __name__ == "__main__":
     root = tk.Tk()
     app = MenuFuncionario(root)

@@ -23,7 +23,7 @@ class VentanaClientes:
         tk.Label(self.root, text="Gestión de Clientes",
                  font=("Arial", 14, "bold")).pack(pady=(10, 5))
 
-        # ── Formulario ──────────────────────────────────────────
+        # ── Formulario ──────────────
         marco_form = tk.LabelFrame(self.root, text="Datos del cliente", padx=10, pady=10)
         marco_form.pack(fill="x", padx=15, pady=5)
 
@@ -46,7 +46,7 @@ class VentanaClientes:
             entry.grid(row=fila, column=columna + 1, padx=5, pady=4)
             setattr(self, atributo, entry)
 
-        # ── Botones de acción ───────────────────────────────────
+        # ── Botones ────────────
         marco_botones = tk.Frame(self.root)
         marco_botones.pack(pady=8)
 
@@ -59,7 +59,7 @@ class VentanaClientes:
         tk.Button(marco_botones, text="Limpiar",    width=12,
                   command=self._limpiar).grid(row=0, column=3, padx=5)
 
-        # ── Tabla ───────────────────────────────────────────────
+        # ── Tabla ──────────────────
         marco_tabla = tk.Frame(self.root)
         marco_tabla.pack(fill="both", expand=True, padx=15, pady=5)
 
@@ -85,7 +85,7 @@ class VentanaClientes:
         # llena el formulario
         self.tabla.bind("<<TreeviewSelect>>", self._seleccionar_fila)
 
-    # ── Lógica de la interfaz ───────────────────────────────────
+    # ── Lógica de la interfaz ───────────
 
     def _cargar_tabla(self):
         """Recarga todos los clientes desde la BD."""
@@ -99,7 +99,7 @@ class VentanaClientes:
             ))
 
     def _seleccionar_fila(self, event):
-        """Llena el formulario con los datos de la fila seleccionada."""
+        """Llena el formulario con los datos de la fila seleccionada"""
         seleccion = self.tabla.selection()
         if not seleccion:
             return
@@ -178,7 +178,7 @@ class VentanaClientes:
 
 
 # ══════════════════════════════════════════════════════════════
-#  VENTANA REDUCIDA — el cliente solo edita sus propios datos
+#  VENTANA — el cliente solo edita sus propios datos
 # ══════════════════════════════════════════════════════════════
 
 class VentanaActualizarCliente:

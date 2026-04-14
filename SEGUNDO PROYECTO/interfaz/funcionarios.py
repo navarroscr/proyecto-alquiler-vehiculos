@@ -1,11 +1,10 @@
-# interfaz/funcionarios.py
 import tkinter as tk
 from tkinter import messagebox, ttk
 import logica.funcionario_logica as funcionario_logica
 
 
 class VentanaFuncionarios:
-    """Gestión completa de funcionarios (solo funcionario con permisos)."""
+    """Gestión completa de funcionarios, solo funcionario con permisos"""
 
     def __init__(self, root):
         self.root = root
@@ -20,7 +19,7 @@ class VentanaFuncionarios:
         tk.Label(self.root, text="Gestión de Funcionarios",
                  font=("Arial", 14, "bold")).pack(pady=(10, 5))
 
-        # ── Formulario ──────────────────────────────────────────
+        # ── Formulario ──────────────
         marco_form = tk.LabelFrame(self.root, text="Datos del funcionario",
                                    padx=10, pady=10)
         marco_form.pack(fill="x", padx=15, pady=5)
@@ -43,7 +42,7 @@ class VentanaFuncionarios:
             entry.grid(row=fila, column=columna + 1, padx=5, pady=4)
             setattr(self, atributo, entry)
 
-        # ── Botones ─────────────────────────────────────────────
+        # ── Botones ───────────────
         marco_botones = tk.Frame(self.root)
         marco_botones.pack(pady=8)
 
@@ -56,7 +55,7 @@ class VentanaFuncionarios:
         tk.Button(marco_botones, text="Limpiar",    width=12,
                   command=self._limpiar).grid(row=0, column=3, padx=5)
 
-        # ── Tabla ───────────────────────────────────────────────
+        # ── Tabla ──────────────
         marco_tabla = tk.Frame(self.root)
         marco_tabla.pack(fill="both", expand=True, padx=15, pady=5)
 
@@ -78,7 +77,7 @@ class VentanaFuncionarios:
 
         self.tabla.bind("<<TreeviewSelect>>", self._seleccionar_fila)
 
-    # ── Lógica de la interfaz ───────────────────────────────────
+    # ── Lógica de la interfaz ──────────
 
     def _cargar_tabla(self):
         for fila in self.tabla.get_children():
@@ -101,7 +100,7 @@ class VentanaFuncionarios:
             entry.config(state="normal")
             entry.delete(0, tk.END)
             entry.insert(0, str(valor))
-        self.entry_id.config(state="disabled")  # el ID no se edita
+        self.entry_id.config(state="disabled")  
 
     def _agregar(self):
         try:
@@ -166,7 +165,7 @@ class VentanaFuncionarios:
             entry.delete(0, tk.END)
 
 
-# ── Punto de entrada temporal ───────────────────────────────────
+# ── Punto de entrada temporal ───────────
 if __name__ == "__main__":
     root = tk.Tk()
     app = VentanaFuncionarios(root)

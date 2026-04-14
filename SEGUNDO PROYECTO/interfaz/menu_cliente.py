@@ -1,4 +1,3 @@
-# interfaz/menu_cliente.py
 import tkinter as tk
 from tkinter import messagebox
 
@@ -41,7 +40,7 @@ class MenuCliente:
         tk.Button(self.root, text="Cerrar sesión", width=25,
                   command=self.cerrar_sesion).pack(pady=(20, 0))
 
-    # ── Navegación ──────────────────────────────────────────────
+    # ── Navegación ──────────────
 
     def abrir_actualizar_datos(self):
         from interfaz.clientes import VentanaActualizarCliente
@@ -64,7 +63,7 @@ class MenuCliente:
             self.root.destroy()
 
 
-# ── Punto de entrada temporal (para probar sin login) ──────────
+# Punto de entrada 
 if __name__ == "__main__":
     root = tk.Tk()
     app = MenuCliente(root, id_cliente="cliente_prueba")

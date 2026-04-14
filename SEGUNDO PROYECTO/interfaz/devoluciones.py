@@ -1,4 +1,3 @@
-# interfaz/devoluciones.py
 import tkinter as tk
 from tkinter import messagebox, ttk
 import logica.devolucion_logica as devolucion_logica
@@ -6,7 +5,7 @@ import datos.alquiler_datos as alquiler_datos
 
 
 class VentanaDevoluciones:
-    """Formulario para procesar la devolución de un vehículo (solo funcionario)."""
+    """Formulario para procesar la devolución de un vehículo"""
 
     def __init__(self, root):
         self.root = root
@@ -21,7 +20,7 @@ class VentanaDevoluciones:
         tk.Label(self.root, text="Devolución de Vehículo",
                  font=("Arial", 14, "bold")).pack(pady=(15, 5))
 
-        # ── Tabla de alquileres en préstamo ─────────────────────
+        # ── Tabla de alquileres en préstamo ─────────
         marco_tabla = tk.LabelFrame(self.root,
                                     text="Alquileres en préstamo (seleccione uno)",
                                     padx=8, pady=8)
@@ -40,18 +39,18 @@ class VentanaDevoluciones:
         self.tabla.pack(fill="x")
         self.tabla.bind("<<TreeviewSelect>>", self._seleccionar_alquiler)
 
-        # ── Formulario de devolución ────────────────────────────
+        # ── Formulario de devolución ────────────
         marco_form = tk.LabelFrame(self.root, text="Datos de la devolución",
                                    padx=12, pady=10)
         marco_form.pack(fill="x", padx=15, pady=8)
 
-        # ID Alquiler (se llena al seleccionar de la tabla)
+        # ID Alquiler 
         tk.Label(marco_form, text="ID Alquiler:", anchor="e", width=16).grid(
             row=0, column=0, sticky="e", pady=5)
         self.entry_id_alquiler = tk.Entry(marco_form, width=25, state="disabled")
         self.entry_id_alquiler.grid(row=0, column=1, pady=5, padx=5)
 
-        # Fecha real de devolución
+        # Fecha de devolución
         tk.Label(marco_form, text="Fecha devolución:", anchor="e", width=16).grid(
             row=1, column=0, sticky="e", pady=5)
         self.entry_fecha = tk.Entry(marco_form, width=25)
@@ -65,7 +64,7 @@ class VentanaDevoluciones:
         self.entry_seguro = tk.Entry(marco_form, width=25)
         self.entry_seguro.grid(row=2, column=1, pady=5, padx=5)
 
-        # ¿Hay daños? checkbox
+        # daños checkbox
         self.var_danos = tk.BooleanVar()
         tk.Checkbutton(marco_form, text="¿El vehículo tiene daños?",
                        variable=self.var_danos,
@@ -88,7 +87,7 @@ class VentanaDevoluciones:
         tk.Button(self.root, text="Procesar Devolución", width=22,
                   command=self._procesar).pack(pady=10)
 
-        # ── Resumen ─────────────────────────────────────────────
+        # ── Resumen ─────────────────
         self.marco_resumen = tk.LabelFrame(self.root, text="Resumen de cobros",
                                            padx=10, pady=8)
         self.marco_resumen.pack(fill="x", padx=15, pady=5)
@@ -105,7 +104,7 @@ class VentanaDevoluciones:
                     self.lbl_seguro, self.lbl_danos, self.lbl_total]:
             lbl.pack(anchor="w")
 
-    # ── Lógica de la interfaz ───────────────────────────────────
+    # ── Lógica de la interfaz ──────────
 
     def _cargar_alquileres_activos(self):
         """Carga solo los alquileres en estado 'en prestamo'."""
@@ -119,7 +118,7 @@ class VentanaDevoluciones:
                 ))
 
     def _seleccionar_alquiler(self, event):
-        """Al seleccionar una fila llena el campo ID Alquiler automáticamente."""
+        """Al seleccionar una fila llena el campo ID Alquiler automáticamente"""
         seleccion = self.tabla.selection()
         if not seleccion:
             return
@@ -130,7 +129,7 @@ class VentanaDevoluciones:
         self.entry_id_alquiler.config(state="disabled")
 
     def _toggle_danos(self):
-        """Habilita o deshabilita los campos de daño según el checkbox."""
+        """Habilita o deshabilita los campos de daño según el checkbox"""
         if self.var_danos.get():
             self.entry_descripcion.config(state="normal")
             self.entry_costo_dano.config(state="normal")
@@ -198,7 +197,7 @@ class VentanaDevoluciones:
         self._toggle_danos()
 
 
-# ── Punto de entrada temporal ───────────────────────────────────
+# ── Punto de entrada temporal ─────────
 if __name__ == "__main__":
     root = tk.Tk()
     app = VentanaDevoluciones(root)

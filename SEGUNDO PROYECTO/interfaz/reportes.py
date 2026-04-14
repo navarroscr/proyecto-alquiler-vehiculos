@@ -1,4 +1,3 @@
-# interfaz/reportes.py
 import tkinter as tk
 from tkinter import messagebox
 from datetime import datetime, date
@@ -24,7 +23,7 @@ class VentanaReportes:
         tk.Label(self.root, text="Reportes",
                  font=("Arial", 14, "bold")).pack(pady=(20, 10))
 
-        # ── Reporte 1: Vehículos más rentados ───────────────────
+        # ── Reporte 1: Vehículos más rentados ───────
         marco1 = tk.LabelFrame(self.root,
                                text="Reporte 1: Vehículos más rentados",
                                padx=10, pady=8)
@@ -50,7 +49,7 @@ class VentanaReportes:
         tk.Button(marco1, text="Generar gráfico de barras", width=28,
                   command=self._reporte_vehiculos).pack(pady=(6, 2))
 
-        # ── Reporte 2: Segmentación por edad ────────────────────
+        # ── Reporte 2: Segmentación por edad ────────
         marco2 = tk.LabelFrame(self.root,
                                text="Reporte 2: Segmentación de clientes por edad",
                                padx=10, pady=8)
@@ -68,7 +67,7 @@ class VentanaReportes:
                   command=self._reporte_edades).pack(pady=(6, 2))
 
     # ══════════════════════════════════════════════════════════
-    #  REPORTE 1 — Vehículos más rentados (barras)
+    #  REPORTE 1 — Vehículos más rentados, barras
     # ══════════════════════════════════════════════════════════
 
     def _reporte_vehiculos(self):
@@ -83,7 +82,7 @@ class VentanaReportes:
 
         # Obtener todos los alquileres y filtrar por rango de fechas
         alquileres = alquiler_datos.obtener_todos_los_alquileres()
-        conteo = {}  # id_vehiculo → cantidad de alquileres
+        conteo = {}  # id_vehiculo : cantidad de alquileres
 
         for a in alquileres:
             try:
@@ -136,7 +135,7 @@ class VentanaReportes:
 
         ax.set_xlabel("Total de alquileres")
         ax.set_title(f"Vehículos más rentados\n({desde_str} al {hasta_str})")
-        ax.invert_yaxis()  # el más rentado arriba
+        ax.invert_yaxis()  
         fig.tight_layout()
 
         canvas = FigureCanvasTkAgg(fig, master=ventana_graf)
@@ -144,7 +143,7 @@ class VentanaReportes:
         canvas.get_tk_widget().pack(fill="both", expand=True)
 
     # ══════════════════════════════════════════════════════════
-    #  REPORTE 2 — Segmentación por edad (líneas)
+    #  REPORTE 2 — Segmentación por edad, líneas
     # ══════════════════════════════════════════════════════════
 
     def _reporte_edades(self):
@@ -154,7 +153,7 @@ class VentanaReportes:
             messagebox.showerror("Error", "Ingrese un año válido (ej: 2025).")
             return
 
-        # Rangos de edad según instrucciones del proyecto
+        # Rangos de edad 
         rangos = [
             (18, 19, "18-19"),
             (20, 24, "20-24"),
@@ -193,7 +192,7 @@ class VentanaReportes:
                     for c in clientes_datos.obtener_clientes()}
 
         # Contar alquileres por rango de edad y mes
-        # datos[rango_label][mes(1-12)] = cantidad
+        
         datos = {r[2]: [0] * 12 for r in rangos}
 
         for alquiler, fecha_inicio in alquileres_anio:
@@ -202,7 +201,7 @@ class VentanaReportes:
             if not cliente:
                 continue
 
-            # Calcular edad del cliente al momento del alquiler
+            # Calcular edad del cliente 
             nacimiento = cliente.get("fecha_nacimiento")
             if not nacimiento:
                 continue
@@ -217,7 +216,7 @@ class VentanaReportes:
                 continue
 
             # Buscar en qué rango cae
-            mes = fecha_inicio.month - 1  # índice 0-11
+            mes = fecha_inicio.month - 1  
             for min_e, max_e, etiqueta in rangos:
                 if min_e <= edad <= max_e:
                     datos[etiqueta][mes] += 1
@@ -256,7 +255,7 @@ class VentanaReportes:
         canvas.get_tk_widget().pack(fill="both", expand=True)
 
 
-# ── Punto de entrada temporal ───────────────────────────────────
+# ── Punto de entrada temporal ─────────────
 if __name__ == "__main__":
     root = tk.Tk()
     app = VentanaReportes(root)

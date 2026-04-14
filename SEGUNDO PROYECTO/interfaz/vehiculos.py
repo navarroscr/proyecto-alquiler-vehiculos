@@ -1,4 +1,3 @@
-# interfaz/vehiculos.py
 import tkinter as tk
 from tkinter import messagebox, ttk, filedialog
 import logica.vehiculo_logica as vehiculo_logica
@@ -9,7 +8,7 @@ import logica.vehiculo_logica as vehiculo_logica
 # ══════════════════════════════════════════════════════════════
 
 class VentanaVehiculos:
-    """Gestión completa de vehículos (solo funcionario)."""
+    """Gestión completa de vehículos (solo funcionario)"""
 
     def __init__(self, root):
         self.root = root
@@ -24,7 +23,7 @@ class VentanaVehiculos:
         tk.Label(self.root, text="Gestión de Vehículos",
                  font=("Arial", 14, "bold")).pack(pady=(10, 5))
 
-        # ── Formulario ──────────────────────────────────────────
+        # ── Formulario ──────────────
         marco_form = tk.LabelFrame(self.root, text="Datos del vehículo",
                                    padx=10, pady=10)
         marco_form.pack(fill="x", padx=15, pady=5)
@@ -101,7 +100,7 @@ class VentanaVehiculos:
         tk.Button(marco_img, text="...", width=3,
                   command=self._explorar_imagen).pack(side="left", padx=2)
 
-        # ── Botones ─────────────────────────────────────────────
+        # ── Botones ──────────────────
         marco_botones = tk.Frame(self.root)
         marco_botones.pack(pady=6)
 
@@ -114,7 +113,7 @@ class VentanaVehiculos:
         tk.Button(marco_botones, text="Limpiar",    width=12,
                   command=self._limpiar).grid(row=0, column=3, padx=5)
 
-        # ── Tabla ───────────────────────────────────────────────
+        # ── Tabla ──────────────
         marco_tabla = tk.Frame(self.root)
         marco_tabla.pack(fill="both", expand=True, padx=15, pady=5)
 
@@ -138,7 +137,7 @@ class VentanaVehiculos:
 
         self.tabla.bind("<<TreeviewSelect>>", self._seleccionar_fila)
 
-    # ── Lógica de la interfaz ───────────────────────────────────
+    # ── Lógica de interfaz ─────────
 
     def _cargar_tabla(self):
         for fila in self.tabla.get_children():
@@ -194,7 +193,7 @@ class VentanaVehiculos:
 
     def _agregar(self):
         try:
-            # Conversión de tipos antes de pasar a la clase
+            # Conversión de tipos 
             vehiculo_logica.crear_vehiculo(
                 self.entry_id.get().strip(),
                 self.entry_marca.get().strip(),
@@ -332,7 +331,7 @@ class VentanaVehiculosDisponibles:
             ))
 
 
-# ── Punto de entrada temporal ───────────────────────────────────
+# ── Punto de entrada temporal ────────────
 if __name__ == "__main__":
     root = tk.Tk()
     app = VentanaVehiculos(root)

@@ -46,7 +46,7 @@ class VentanaLogin:
         tk.Button(self.root, text="Registrarme como cliente", width=20,
                   command=self._registrar_cliente).pack()
 
-    # ── Lógica del login ────────────────────────────────────────
+    # ── Lógica del login ───────────────
 
     def _ingresar(self):
         nombre_usuario = self.entry_usuario.get().strip()
@@ -79,7 +79,7 @@ class VentanaLogin:
         tipo = usuario.get("tipo_usuario", "").lower()
         id_referencia = usuario.get("id_usuario")
 
-        self.root.destroy()  # cierra el login
+        self.root.destroy()  
 
         nueva_root = tk.Tk()
         if tipo == "funcionario":
@@ -100,7 +100,7 @@ class VentanaLogin:
         VentanaClientes(tk.Toplevel(self.root))
 
 
-# ── Punto de entrada principal del sistema ──────────────────────
+# ── Punto de entrada principal del sistema ────────
 if __name__ == "__main__":
     root = tk.Tk()
     app = VentanaLogin(root)
