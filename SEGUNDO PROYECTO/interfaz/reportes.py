@@ -1,261 +1,210 @@
 import tkinter as tk
 from tkinter import messagebox
-from datetime import datetime, date
+from datetime import datetime
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-import datos.alquiler_datos as alquiler_datos
-import datos.vehiculo_datos as vehiculo_datos
-import datos.clientes_datos as clientes_datos
+import logica.reportes_logica as reportes_logica
 
 
 class VentanaReportes:
-    """Ventana de reportes con dos gráficos: barras y líneas."""
+    """Ventana de reportes con dos graficos: barras y lineas."""
 
     def __init__(self, root):
         self.root = root
         self.root.title("Reportes - AutoTrust S.A.")
-        self.root.geometry("420x280")
+        self.root.geometry("550x400")
         self.root.resizable(False, False)
 
         self._construir_interfaz()
 
     def _construir_interfaz(self):
-        tk.Label(self.root, text="Reportes",
-                 font=("Arial", 14, "bold")).pack(pady=(20, 10))
+        # Titulo principal
+        tk.Label(self.root, text="AutoTrust S.A.",
+                 font=("Arial", 16, "bold")).pack(pady=(15, 5))
+        tk.Label(self.root, text="Sistema de Reportes",
+                 font=("Arial", 12)).pack(pady=(0, 15))
 
-        # ── Reporte 1: Vehículos más rentados ───────
+        # Reporte 1: Vehiculos mas rentados
         marco1 = tk.LabelFrame(self.root,
-                               text="Reporte 1: Vehículos más rentados",
-                               padx=10, pady=8)
+                               text=" Reporte 1: Vehiculos mas rentados ",
+                               padx=10, pady=8,
+                               font=("Arial", 11, "bold"))
         marco1.pack(fill="x", padx=20, pady=8)
 
-        marco_fechas = tk.Frame(marco1)
-        marco_fechas.pack()
+        # Fila de fechas
+        frame_fechas = tk.Frame(marco1)
+        frame_fechas.pack(pady=5)
 
-        tk.Label(marco_fechas, text="Desde:").grid(row=0, column=0, padx=5)
-        self.entry_desde = tk.Entry(marco_fechas, width=12)
+        tk.Label(frame_fechas, text="Desde:", font=("Arial", 10),
+                width=6, anchor="e").grid(row=0, column=0, padx=5)
+        self.entry_desde = tk.Entry(frame_fechas, width=12, font=("Arial", 10))
         self.entry_desde.grid(row=0, column=1, padx=5)
         self.entry_desde.insert(0, "2024-01-01")
 
-        tk.Label(marco_fechas, text="Hasta:").grid(row=0, column=2, padx=5)
-        self.entry_hasta = tk.Entry(marco_fechas, width=12)
+        tk.Label(frame_fechas, text="Hasta:", font=("Arial", 10),
+                width=6, anchor="e").grid(row=0, column=2, padx=5)
+        self.entry_hasta = tk.Entry(frame_fechas, width=12, font=("Arial", 10))
         self.entry_hasta.grid(row=0, column=3, padx=5)
         self.entry_hasta.insert(0, datetime.now().strftime("%Y-%m-%d"))
 
-        tk.Label(marco_fechas, text="(YYYY-MM-DD)",
-                 font=("Arial", 8), fg="gray").grid(
-            row=1, column=0, columnspan=4, pady=2)
+        # Formato de fecha
+        tk.Label(marco1, text="(Formato: YYYY-MM-DD)",
+                 font=("Arial", 8), fg="gray").pack(pady=(0, 5))
 
-        tk.Button(marco1, text="Generar gráfico de barras", width=28,
-                  command=self._reporte_vehiculos).pack(pady=(6, 2))
+        # Boton generar grafico de barras
+        tk.Button(marco1, text="Generar grafico de barras",
+                  width=30, height=1, font=("Arial", 10, "bold"),
+                  bg="#4CAF50", fg="white",
+                  command=self._reporte_vehiculos).pack(pady=5)
 
-        # ── Reporte 2: Segmentación por edad ────────
+        # Reporte 2: Segmentacion por edad
         marco2 = tk.LabelFrame(self.root,
-                               text="Reporte 2: Segmentación de clientes por edad",
-                               padx=10, pady=8)
+                               text=" Reporte 2: Segmentacion de clientes por edad ",
+                               padx=10, pady=8,
+                               font=("Arial", 11, "bold"))
         marco2.pack(fill="x", padx=20, pady=8)
 
-        marco_anio = tk.Frame(marco2)
-        marco_anio.pack()
+        frame_anio = tk.Frame(marco2)
+        frame_anio.pack(pady=10)
 
-        tk.Label(marco_anio, text="Año:").grid(row=0, column=0, padx=5)
-        self.entry_anio = tk.Entry(marco_anio, width=8)
+        tk.Label(frame_anio, text="Año:", font=("Arial", 10),
+                width=6, anchor="e").grid(row=0, column=0, padx=5)
+        self.entry_anio = tk.Entry(frame_anio, width=8, font=("Arial", 10))
         self.entry_anio.grid(row=0, column=1, padx=5)
         self.entry_anio.insert(0, str(datetime.now().year))
 
-        tk.Button(marco2, text="Generar gráfico de líneas", width=28,
-                  command=self._reporte_edades).pack(pady=(6, 2))
+        # Boton generar grafico de lineas
+        tk.Button(marco2, text="Generar grafico de lineas",
+                  width=30, height=1, font=("Arial", 10, "bold"),
+                  bg="#2196F3", fg="white",
+                  command=self._reporte_edades).pack(pady=5)
 
-    # ══════════════════════════════════════════════════════════
-    #  REPORTE 1 — Vehículos más rentados, barras
-    # ══════════════════════════════════════════════════════════
-
+    # Reporte 1: Vehiculos mas rentados (grafico de barras)
     def _reporte_vehiculos(self):
         try:
             desde_str = self.entry_desde.get().strip()
             hasta_str = self.entry_hasta.get().strip()
-            desde = datetime.strptime(desde_str, "%Y-%m-%d").date()
-            hasta = datetime.strptime(hasta_str, "%Y-%m-%d").date()
-        except ValueError:
-            messagebox.showerror("Error", "Formato de fecha inválido. Use YYYY-MM-DD.")
-            return
 
-        # Obtener todos los alquileres y filtrar por rango de fechas
-        alquileres = alquiler_datos.obtener_todos_los_alquileres()
-        conteo = {}  # id_vehiculo : cantidad de alquileres
+            if not desde_str or not hasta_str:
+                messagebox.showwarning("Atencion", "Complete ambas fechas.")
+                return
 
-        for a in alquileres:
+            # Validar formato de fechas
             try:
-                fecha_inicio = a.get("fecha_inicio")
-                if isinstance(fecha_inicio, str):
-                    fecha_inicio = datetime.strptime(fecha_inicio, "%Y-%m-%d").date()
-                elif hasattr(fecha_inicio, "date"):
-                    fecha_inicio = fecha_inicio.date()
+                datetime.strptime(desde_str, "%Y-%m-%d")
+                datetime.strptime(hasta_str, "%Y-%m-%d")
+            except ValueError:
+                messagebox.showerror("Error", "Formato de fecha invalido. Use YYYY-MM-DD")
+                return
 
-                if desde <= fecha_inicio <= hasta:
-                    id_v = str(a.get("id_vehiculo", ""))
-                    conteo[id_v] = conteo.get(id_v, 0) + 1
-            except Exception:
-                continue
+            # Obtener datos desde la logica
+            etiquetas, valores, porcentajes = reportes_logica.obtener_vehiculos_mas_rentados(
+                desde_str, hasta_str
+            )
 
-        if not conteo:
-            messagebox.showinfo("Sin datos",
-                                "No hay alquileres en el rango de fechas indicado.")
-            return
+            if not etiquetas:
+                messagebox.showinfo("Sin datos",
+                                    "No hay alquileres en el rango de fechas indicado.")
+                return
 
-        # Obtener nombre del modelo para cada vehículo
-        etiquetas = []
-        valores   = []
-        for id_v, cantidad in sorted(conteo.items(),
-                                     key=lambda x: x[1], reverse=True):
-            vehiculo = vehiculo_datos.buscar_vehiculo_por_id(id_v)
-            if vehiculo:
-                nombre = f"{vehiculo.get('marca', '')} {vehiculo.get('tipo', '')}"
-            else:
-                nombre = id_v
-            etiquetas.append(nombre)
-            valores.append(cantidad)
+            # Crear ventana del grafico
+            ventana_graf = tk.Toplevel(self.root)
+            ventana_graf.title("Vehiculos mas rentados - AutoTrust S.A.")
+            ventana_graf.geometry("750x550")
+            ventana_graf.resizable(True, True)
 
-        # Calcular porcentajes
-        total_alquileres = sum(valores)
-        porcentajes = [(v / total_alquileres) * 100 for v in valores]
+            # Crear figura de matplotlib
+            fig, ax = plt.subplots(figsize=(10, 6))
+            barras = ax.barh(etiquetas, valores, color="steelblue")
 
-        # Crear ventana del gráfico
-        ventana_graf = tk.Toplevel(self.root)
-        ventana_graf.title("Vehículos más rentados")
-        ventana_graf.geometry("700x480")
+            # Mostrar porcentaje al lado de cada barra
+            for barra, pct in zip(barras, porcentajes):
+                ax.text(barra.get_width() + 0.1,
+                        barra.get_y() + barra.get_height() / 2,
+                        f"{pct:.1f}%", va="center", fontsize=10, fontweight="bold")
 
-        fig, ax = plt.subplots(figsize=(9, 5))
-        barras = ax.barh(etiquetas, valores, color="steelblue")
+            ax.set_xlabel("Total de alquileres", fontsize=11, fontweight="bold")
+            ax.set_ylabel("Vehiculos", fontsize=11, fontweight="bold")
+            ax.set_title(f"Vehiculos mas rentados\n({desde_str} al {hasta_str})",
+                        fontsize=12, fontweight="bold")
+            ax.invert_yaxis()
+            ax.grid(True, linestyle="--", alpha=0.3)
+            fig.tight_layout()
 
-        # Mostrar porcentaje al lado de cada barra
-        for barra, pct in zip(barras, porcentajes):
-            ax.text(barra.get_width() + 0.1, barra.get_y() + barra.get_height() / 2,
-                    f"{pct:.1f}%", va="center", fontsize=9)
+            # Mostrar grafico en la ventana
+            canvas = FigureCanvasTkAgg(fig, master=ventana_graf)
+            canvas.draw()
+            canvas.get_tk_widget().pack(fill="both", expand=True)
 
-        ax.set_xlabel("Total de alquileres")
-        ax.set_title(f"Vehículos más rentados\n({desde_str} al {hasta_str})")
-        ax.invert_yaxis()  
-        fig.tight_layout()
+        except ValueError as e:
+            messagebox.showerror("Error", str(e))
+        except Exception as e:
+            messagebox.showerror("Error", f"Error al generar reporte: {str(e)}")
 
-        canvas = FigureCanvasTkAgg(fig, master=ventana_graf)
-        canvas.draw()
-        canvas.get_tk_widget().pack(fill="both", expand=True)
-
-    # ══════════════════════════════════════════════════════════
-    #  REPORTE 2 — Segmentación por edad, líneas
-    # ══════════════════════════════════════════════════════════
-
+    # Reporte 2: Segmentacion por edad (grafico de lineas)
     def _reporte_edades(self):
         try:
-            anio = int(self.entry_anio.get().strip())
-        except ValueError:
-            messagebox.showerror("Error", "Ingrese un año válido (ej: 2025).")
-            return
+            anio = self.entry_anio.get().strip()
 
-        # Rangos de edad 
-        rangos = [
-            (18, 19, "18-19"),
-            (20, 24, "20-24"),
-            (25, 29, "25-29"),
-            (30, 34, "30-34"),
-            (35, 39, "35-39"),
-            (40, 44, "40-44"),
-            (45, 49, "45-49"),
-            (50, 54, "50-54"),
-            (55, 59, "55-59"),
-            (60, 99, "60+"),
-        ]
+            if not anio:
+                messagebox.showwarning("Atencion", "Ingrese un año.")
+                return
 
-        # Obtener todos los alquileres del año indicado
-        alquileres = alquiler_datos.obtener_todos_los_alquileres()
-        alquileres_anio = []
-        for a in alquileres:
+            # Validar que sea un año valido
             try:
-                fecha_inicio = a.get("fecha_inicio")
-                if isinstance(fecha_inicio, str):
-                    fecha_inicio = datetime.strptime(fecha_inicio, "%Y-%m-%d").date()
-                elif hasattr(fecha_inicio, "date"):
-                    fecha_inicio = fecha_inicio.date()
-                if fecha_inicio.year == anio:
-                    alquileres_anio.append((a, fecha_inicio))
-            except Exception:
-                continue
+                anio_int = int(anio)
+                if anio_int < 2000 or anio_int > 2100:
+                    messagebox.showwarning("Atencion", "Ingrese un año valido (2000-2100).")
+                    return
+            except ValueError:
+                messagebox.showerror("Error", "Ingrese un año valido (ej: 2025).")
+                return
 
-        if not alquileres_anio:
-            messagebox.showinfo("Sin datos",
-                                f"No hay alquileres registrados para el año {anio}.")
-            return
+            # Obtener datos desde la logica
+            datos_activos, meses = reportes_logica.obtener_segmentacion_edades(anio)
 
-        # Cargar clientes en un diccionario para búsqueda rápida
-        clientes = {c.get("id_cliente"): c
-                    for c in clientes_datos.obtener_clientes()}
+            if not datos_activos:
+                messagebox.showinfo("Sin datos",
+                                    f"No hay alquileres registrados para el año {anio}.")
+                return
 
-        # Contar alquileres por rango de edad y mes
-        
-        datos = {r[2]: [0] * 12 for r in rangos}
+            # Crear ventana del grafico
+            ventana_graf = tk.Toplevel(self.root)
+            ventana_graf.title(f"Segmentacion por edad - {anio}")
+            ventana_graf.geometry("800x550")
+            ventana_graf.resizable(True, True)
 
-        for alquiler, fecha_inicio in alquileres_anio:
-            id_cliente = str(alquiler.get("id_cliente", ""))
-            cliente = clientes.get(id_cliente)
-            if not cliente:
-                continue
+            # Crear figura de matplotlib
+            fig, ax = plt.subplots(figsize=(11, 6))
 
-            # Calcular edad del cliente 
-            nacimiento = cliente.get("fecha_nacimiento")
-            if not nacimiento:
-                continue
-            try:
-                if isinstance(nacimiento, str):
-                    nacimiento = datetime.strptime(nacimiento, "%Y-%m-%d").date()
-                elif hasattr(nacimiento, "date"):
-                    nacimiento = nacimiento.date()
+            # Colores para las lineas
+            colores = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd',
+                       '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf']
 
-                edad = (fecha_inicio - nacimiento).days // 365
-            except Exception:
-                continue
+            # Dibujar linea para cada rango de edad
+            for i, (etiqueta, valores) in enumerate(datos_activos.items()):
+                ax.plot(meses, valores, marker="o", label=etiqueta,
+                       linewidth=2, color=colores[i % len(colores)])
 
-            # Buscar en qué rango cae
-            mes = fecha_inicio.month - 1  
-            for min_e, max_e, etiqueta in rangos:
-                if min_e <= edad <= max_e:
-                    datos[etiqueta][mes] += 1
-                    break
+            ax.set_xlabel("Mes", fontsize=11, fontweight="bold")
+            ax.set_ylabel("Cantidad de alquileres", fontsize=11, fontweight="bold")
+            ax.set_title(f"Segmentacion de clientes por edad - Año {anio}", fontsize=12, fontweight="bold")
+            ax.legend(title="Rango de edad", bbox_to_anchor=(1.01, 1), loc="upper left")
+            ax.grid(True, linestyle="--", alpha=0.5)
+            fig.tight_layout()
 
-        # Filtrar rangos que tienen al menos un alquiler
-        datos_activos = {k: v for k, v in datos.items() if any(v)}
+            # Mostrar grafico en la ventana
+            canvas = FigureCanvasTkAgg(fig, master=ventana_graf)
+            canvas.draw()
+            canvas.get_tk_widget().pack(fill="both", expand=True)
 
-        if not datos_activos:
-            messagebox.showinfo("Sin datos",
-                                "No hay suficientes datos para generar el reporte.")
-            return
-
-        # Crear ventana del gráfico
-        ventana_graf = tk.Toplevel(self.root)
-        ventana_graf.title(f"Segmentación por edad - {anio}")
-        ventana_graf.geometry("750x500")
-
-        meses = ["Ene", "Feb", "Mar", "Abr", "May", "Jun",
-                 "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"]
-
-        fig, ax = plt.subplots(figsize=(10, 5.5))
-
-        for etiqueta, valores in datos_activos.items():
-            ax.plot(meses, valores, marker="o", label=etiqueta, linewidth=2)
-
-        ax.set_xlabel("Mes")
-        ax.set_ylabel("Cantidad de alquileres")
-        ax.set_title(f"Segmentación de clientes por edad - Año {anio}")
-        ax.legend(title="Rango de edad", bbox_to_anchor=(1.01, 1), loc="upper left")
-        ax.grid(True, linestyle="--", alpha=0.5)
-        fig.tight_layout()
-
-        canvas = FigureCanvasTkAgg(fig, master=ventana_graf)
-        canvas.draw()
-        canvas.get_tk_widget().pack(fill="both", expand=True)
+        except ValueError as e:
+            messagebox.showerror("Error", str(e))
+        except Exception as e:
+            messagebox.showerror("Error", f"Error al generar reporte: {str(e)}")
 
 
-# ── Punto de entrada temporal ─────────────
+# Punto de entrada temporal
 if __name__ == "__main__":
     root = tk.Tk()
     app = VentanaReportes(root)
