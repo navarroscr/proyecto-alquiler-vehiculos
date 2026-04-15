@@ -1,3 +1,4 @@
+# interfaz/login.py
 import tkinter as tk
 from tkinter import messagebox
 import datos.usuarios_datos as usuarios_datos
@@ -29,31 +30,29 @@ class VentanaLogin:
         self.entry_usuario = tk.Entry(marco, width=22)
         self.entry_usuario.grid(row=0, column=1, pady=8, padx=5)
 
-        # Contraseña
-        tk.Label(marco, text="Contraseña:", anchor="e",
+        # Contrasena
+        tk.Label(marco, text="Contrasena:", anchor="e",
                  width=12).grid(row=1, column=0, pady=8)
         self.entry_contrasena = tk.Entry(marco, width=22, show="*")
         self.entry_contrasena.grid(row=1, column=1, pady=8, padx=5)
 
-        # Botón ingresar
+        # Boton ingresar
         tk.Button(self.root, text="Ingresar", width=20,
                   command=self._ingresar).pack(pady=(15, 5))
 
-        # También permite presionar Enter para ingresar
+        # Tambien permite presionar Enter para ingresar
         self.root.bind("<Return>", lambda event: self._ingresar())
 
-        # Botón registro de nuevo cliente
+        # Boton registro de nuevo cliente
         tk.Button(self.root, text="Registrarme como cliente", width=20,
                   command=self._registrar_cliente).pack()
-
-    # ── Lógica del login ───────────────
 
     def _ingresar(self):
         nombre_usuario = self.entry_usuario.get().strip()
         contrasena     = self.entry_contrasena.get().strip()
 
         if not nombre_usuario or not contrasena:
-            messagebox.showwarning("Atención", "Ingrese usuario y contraseña.")
+            messagebox.showwarning("Atencion", "Ingrese usuario y contrasena.")
             return
 
         # Buscar usuario en MongoDB
@@ -63,23 +62,23 @@ class VentanaLogin:
             messagebox.showerror("Error", "Usuario no encontrado.")
             return
 
-        # Verificar que esté activo
+        # Verificar que este activo
         if usuario.get("estado") != "activo":
             messagebox.showerror("Acceso denegado",
-                                 "Su cuenta está inactiva. "
+                                 "Su cuenta esta inactiva. "
                                  "Contacte a un funcionario.")
             return
 
-        # Verificar contraseña
+        # Verificar contrasena
         if usuario.get("contrasena") != contrasena:
-            messagebox.showerror("Error", "Contraseña incorrecta.")
+            messagebox.showerror("Error", "Contrasena incorrecta.")
             return
 
-        # Redirigir según tipo de usuario
+        # Redirigir segun tipo de usuario
         tipo = usuario.get("tipo_usuario", "").lower()
         id_referencia = usuario.get("id_usuario")
 
-        self.root.destroy()  
+        self.root.destroy()
 
         nueva_root = tk.Tk()
         if tipo == "funcionario":
@@ -95,12 +94,12 @@ class VentanaLogin:
         nueva_root.mainloop()
 
     def _registrar_cliente(self):
-        """Abre el formulario de registro para nuevos clientes."""
-        from interfaz.clientes import VentanaClientes
-        VentanaClientes(tk.Toplevel(self.root))
+        """Abre el formulario de registro para nuevos clientes (sin tabla)."""
+        from interfaz.clientes import VentanaRegistroCliente
+        VentanaRegistroCliente(tk.Toplevel(self.root))
 
 
-# ── Punto de entrada principal del sistema ────────
+# Punto de entrada principal del sistema
 if __name__ == "__main__":
     root = tk.Tk()
     app = VentanaLogin(root)
