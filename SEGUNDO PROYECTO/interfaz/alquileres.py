@@ -1,4 +1,3 @@
-# interfaz/alquileres.py
 import tkinter as tk
 from tkinter import messagebox, ttk
 import logica.alquiler_logica as alquiler_logica
@@ -11,7 +10,7 @@ import logica.vehiculo_logica as vehiculo_logica
 # ══════════════════════════════════════════════════════════════
 
 class VentanaSolicitarAlquiler:
-    """Formulario para registrar un nuevo alquiler (queda en estado pendiente)."""
+    """Formulario para registrar un nuevo alquiler (queda en estado pendiente)"""
 
     def __init__(self, root, id_cliente=None):
         self.root = root
@@ -34,7 +33,7 @@ class VentanaSolicitarAlquiler:
             row=0, column=0, sticky="e", pady=5)
         self.entry_id_cliente = tk.Entry(marco, width=25)
         self.entry_id_cliente.grid(row=0, column=1, pady=5, padx=5)
-        # Si ya viene el id_cliente (desde menú cliente) lo precarga y bloquea
+        # Si ya viene el id_cliente lo precarga y bloquea
         if self.id_cliente:
             self.entry_id_cliente.insert(0, self.id_cliente)
             self.entry_id_cliente.config(state="disabled")
