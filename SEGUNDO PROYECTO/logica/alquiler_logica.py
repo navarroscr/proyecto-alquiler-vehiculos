@@ -109,3 +109,51 @@ def activar_alquiler(id_alquiler, id_vehiculo):
     except Exception as e:
         print("Error al activar alquiler:", e)
         raise
+
+
+def verificar_disponibilidad_vehiculo(id_vehiculo, fecha_inicio_str, fecha_fin_str):
+    """
+    Verifica si un vehiculo esta disponible para alquilar en un rango de fechas.
+    
+    Parametros:
+        id_vehiculo: ID del vehiculo a verificar
+        fecha_inicio_str: fecha de inicio en formato YYYY-MM-DD
+        fecha_fin_str: fecha de fin en formato YYYY-MM-DD
+    
+    Retorna:
+        bool: True si el vehiculo esta disponible, False si no
+    """
+    try:
+        fecha_inicio = datetime.strptime(fecha_inicio_str, "%Y-%m-%d").date()
+        fecha_fin = datetime.strptime(fecha_fin_str, "%Y-%m-%d").date()
+    except ValueError:
+        raise ValueError("Formato de fecha invalido. Use YYYY-MM-DD.")
+
+    # Obtener todos los alquileres del vehiculo
+    from datos.alquiler_datos import obtener_alquileres
+    alquileres = obtener_alquileres()
+    
+    for a in alquileres:
+        if str(a.get("id_vehiculo")) != str(id_vehiculo):
+            continue
+        
+        estado = a.get("estado", "")
+        # Solo importan los alquileres activos o pendientes
+        if estado not in ["pendiente", "en prestamo"]:
+            continue
+        
+        # Obtener fechas del alquiler
+        a_inicio = a.get("fecha_inicio")
+        a_fin = a.get("fecha_fin")
+        
+        if isinstance(a_inicio, str):
+            a_inicio = datetime.strptime(a_inicio, "%Y-%m-%d").date()
+        if isinstance(a_fin, str):
+            a_fin = datetime.strptime(a_fin, "%Y-%m-%d").date()
+        
+        # Verificar si hay solapamiento de fechas
+        # Un alquiler no esta disponible si las fechas se cruzan
+        if not (fecha_fin < a_inicio or fecha_inicio > a_fin):
+            return False
+    
+    return True

@@ -1,18 +1,21 @@
+# interfaz/vehiculos.py
 import tkinter as tk
 from tkinter import messagebox, ttk, filedialog
+from datetime import datetime
 import logica.vehiculo_logica as vehiculo_logica
+import logica.alquiler_logica as alquiler_logica
 
 
-# ══════════════════════════════════════════════════════════════
-#  VENTANA COMPLETA — para el funcionario
-# ══════════════════════════════════════════════════════════════
+# ============================================
+# VENTANA COMPLETA — para el funcionario
+# ============================================
 
 class VentanaVehiculos:
-    """Gestión completa de vehículos (solo funcionario)"""
+    """Gestion completa de vehiculos (solo funcionario)"""
 
     def __init__(self, root):
         self.root = root
-        self.root.title("Gestión de Vehículos")
+        self.root.title("Gestion de Vehiculos")
         self.root.geometry("900x580")
         self.root.resizable(False, False)
 
@@ -20,16 +23,16 @@ class VentanaVehiculos:
         self._cargar_tabla()
 
     def _construir_interfaz(self):
-        tk.Label(self.root, text="Gestión de Vehículos",
+        tk.Label(self.root, text="Gestion de Vehiculos",
                  font=("Arial", 14, "bold")).pack(pady=(10, 5))
 
-        # ── Formulario ──────────────
-        marco_form = tk.LabelFrame(self.root, text="Datos del vehículo",
+        # Formulario
+        marco_form = tk.LabelFrame(self.root, text="Datos del vehiculo",
                                    padx=10, pady=10)
         marco_form.pack(fill="x", padx=15, pady=5)
 
         # Fila 0
-        tk.Label(marco_form, text="ID Vehículo:").grid(
+        tk.Label(marco_form, text="ID Vehiculo:").grid(
             row=0, column=0, sticky="e", padx=5, pady=3)
         self.entry_id = tk.Entry(marco_form, width=20)
         self.entry_id.grid(row=0, column=1, padx=5, pady=3)
@@ -51,12 +54,12 @@ class VentanaVehiculos:
         self.entry_placa = tk.Entry(marco_form, width=20)
         self.entry_placa.grid(row=1, column=1, padx=5, pady=3)
 
-        tk.Label(marco_form, text="Nº Motor:").grid(
+        tk.Label(marco_form, text="N° Motor:").grid(
             row=1, column=2, sticky="e", padx=5, pady=3)
         self.entry_motor = tk.Entry(marco_form, width=20)
         self.entry_motor.grid(row=1, column=3, padx=5, pady=3)
 
-        tk.Label(marco_form, text="Transmisión:").grid(
+        tk.Label(marco_form, text="Transmision:").grid(
             row=1, column=4, sticky="e", padx=5, pady=3)
         self.combo_transmision = ttk.Combobox(marco_form, width=17, state="readonly",
                                               values=["manual", "automatico"])
@@ -90,7 +93,7 @@ class VentanaVehiculos:
         self.entry_maletas = tk.Entry(marco_form, width=20)
         self.entry_maletas.grid(row=3, column=3, padx=5, pady=3)
 
-        # Imagen con botón para explorar archivo
+        # Imagen con boton para explorar archivo
         tk.Label(marco_form, text="Imagen (ruta):").grid(
             row=3, column=4, sticky="e", padx=5, pady=3)
         marco_img = tk.Frame(marco_form)
@@ -100,7 +103,7 @@ class VentanaVehiculos:
         tk.Button(marco_img, text="...", width=3,
                   command=self._explorar_imagen).pack(side="left", padx=2)
 
-        # ── Botones ──────────────────
+        # Botones
         marco_botones = tk.Frame(self.root)
         marco_botones.pack(pady=6)
 
@@ -113,7 +116,7 @@ class VentanaVehiculos:
         tk.Button(marco_botones, text="Limpiar",    width=12,
                   command=self._limpiar).grid(row=0, column=3, padx=5)
 
-        # ── Tabla ──────────────
+        # Tabla
         marco_tabla = tk.Frame(self.root)
         marco_tabla.pack(fill="both", expand=True, padx=15, pady=5)
 
@@ -122,8 +125,8 @@ class VentanaVehiculos:
         self.tabla = ttk.Treeview(marco_tabla, columns=columnas,
                                   show="headings", height=7)
 
-        encabezados = ("ID", "Marca", "Tipo", "Placa", "Transmisión",
-                       "Combustible", "Color", "Pasajeros", "Costo/día", "Estado")
+        encabezados = ("ID", "Marca", "Tipo", "Placa", "Transmision",
+                       "Combustible", "Color", "Pasajeros", "Costo/dia", "Estado")
         anchos = (60, 80, 70, 80, 90, 80, 70, 70, 70, 80)
         for col, enc, ancho in zip(columnas, encabezados, anchos):
             self.tabla.heading(col, text=enc)
@@ -136,8 +139,6 @@ class VentanaVehiculos:
         scroll.pack(side="right", fill="y")
 
         self.tabla.bind("<<TreeviewSelect>>", self._seleccionar_fila)
-
-    # ── Lógica de interfaz ─────────
 
     def _cargar_tabla(self):
         for fila in self.tabla.get_children():
@@ -154,7 +155,6 @@ class VentanaVehiculos:
         seleccion = self.tabla.selection()
         if not seleccion:
             return
-        # Carga el registro completo desde la BD para tener todos los campos
         id_vehiculo = self.tabla.item(seleccion[0])["values"][0]
         v = vehiculo_logica.buscar_vehiculo(str(id_vehiculo))
         if not v:
@@ -182,10 +182,9 @@ class VentanaVehiculos:
         self.combo_combustible.set(v.get("combustible", ""))
 
     def _explorar_imagen(self):
-        """Abre explorador de archivos para seleccionar imagen."""
         ruta = filedialog.askopenfilename(
             title="Seleccionar imagen",
-            filetypes=[("Imágenes", "*.png *.jpg *.jpeg *.gif *.bmp")]
+            filetypes=[("Imagenes", "*.png *.jpg *.jpeg *.gif *.bmp")]
         )
         if ruta:
             self.entry_imagen.delete(0, tk.END)
@@ -193,7 +192,6 @@ class VentanaVehiculos:
 
     def _agregar(self):
         try:
-            # Conversión de tipos 
             vehiculo_logica.crear_vehiculo(
                 self.entry_id.get().strip(),
                 self.entry_marca.get().strip(),
@@ -203,23 +201,23 @@ class VentanaVehiculos:
                 self.combo_transmision.get().strip(),
                 self.combo_combustible.get().strip(),
                 self.entry_color.get().strip(),
-                int(self.entry_pasajeros.get().strip()),    # str → int
-                float(self.entry_costo.get().strip()),      # str → float
-                int(self.entry_maletas.get().strip()),      # str → int
+                int(self.entry_pasajeros.get().strip()),
+                float(self.entry_costo.get().strip()),
+                int(self.entry_maletas.get().strip()),
                 self.entry_imagen.get().strip()
             )
-            messagebox.showinfo("Éxito", "Vehículo agregado correctamente.")
+            messagebox.showinfo("Exito", "Vehiculo agregado correctamente.")
             self._limpiar()
             self._cargar_tabla()
         except ValueError as e:
-            messagebox.showerror("Error de validación", str(e))
+            messagebox.showerror("Error de validacion", str(e))
         except Exception as e:
             messagebox.showerror("Error", str(e))
 
     def _modificar(self):
         id_vehiculo = self.entry_id.get().strip()
         if not id_vehiculo:
-            messagebox.showwarning("Atención", "Seleccione un vehículo de la tabla.")
+            messagebox.showwarning("Atencion", "Seleccione un vehiculo de la tabla.")
             return
         nuevos_datos = {}
         if self.entry_marca.get().strip():
@@ -238,11 +236,11 @@ class VentanaVehiculos:
             nuevos_datos["combustible"] = self.combo_combustible.get().strip()
 
         if not nuevos_datos:
-            messagebox.showwarning("Atención", "No hay datos para modificar.")
+            messagebox.showwarning("Atencion", "No hay datos para modificar.")
             return
         try:
             vehiculo_logica.actualizar_vehiculo(id_vehiculo, nuevos_datos)
-            messagebox.showinfo("Éxito", "Vehículo actualizado correctamente.")
+            messagebox.showinfo("Exito", "Vehiculo actualizado correctamente.")
             self._limpiar()
             self._cargar_tabla()
         except Exception as e:
@@ -251,13 +249,13 @@ class VentanaVehiculos:
     def _desactivar(self):
         id_vehiculo = self.entry_id.get().strip()
         if not id_vehiculo:
-            messagebox.showwarning("Atención", "Seleccione un vehículo de la tabla.")
+            messagebox.showwarning("Atencion", "Seleccione un vehiculo de la tabla.")
             return
         if messagebox.askyesno("Confirmar",
-                               f"¿Desactivar el vehículo {id_vehiculo}?"):
+                               f"Desactivar el vehiculo {id_vehiculo}?"):
             try:
                 vehiculo_logica.eliminar_vehiculo(id_vehiculo)
-                messagebox.showinfo("Éxito", "Vehículo desactivado.")
+                messagebox.showinfo("Exito", "Vehiculo desactivado.")
                 self._limpiar()
                 self._cargar_tabla()
             except Exception as e:
@@ -274,29 +272,57 @@ class VentanaVehiculos:
         self.combo_combustible.set("")
 
 
-# ══════════════════════════════════════════════════════════════
-#  VENTANA SOLO LECTURA — para el cliente
-# ══════════════════════════════════════════════════════════════
+# ============================================
+# VENTANA SOLO LECTURA — para el cliente (CON FILTRO DE FECHAS)
+# ============================================
 
 class VentanaVehiculosDisponibles:
-    """El cliente solo puede ver los vehículos disponibles."""
+    """El cliente puede ver los vehiculos disponibles filtrando por fechas."""
 
     def __init__(self, root):
         self.root = root
-        self.root.title("Vehículos Disponibles")
-        self.root.geometry("750x380")
+        self.root.title("Vehiculos Disponibles")
+        self.root.geometry("850x520")
         self.root.resizable(False, False)
 
         self._construir_interfaz()
         self._cargar_tabla()
 
     def _construir_interfaz(self):
-        tk.Label(self.root, text="Vehículos Disponibles",
+        tk.Label(self.root, text="Vehiculos Disponibles",
                  font=("Arial", 14, "bold")).pack(pady=(10, 5))
 
-        tk.Button(self.root, text="Actualizar lista",
-                  command=self._cargar_tabla).pack(pady=(0, 8))
+        # Filtro de fechas
+        marco_filtro = tk.LabelFrame(self.root, text="Filtrar por fechas",
+                                     padx=10, pady=8)
+        marco_filtro.pack(fill="x", padx=15, pady=5)
 
+        frame_fechas = tk.Frame(marco_filtro)
+        frame_fechas.pack(pady=5)
+
+        tk.Label(frame_fechas, text="Fecha inicio:", font=("Arial", 10)).grid(row=0, column=0, padx=5)
+        self.entry_fecha_inicio = tk.Entry(frame_fechas, width=12, font=("Arial", 10))
+        self.entry_fecha_inicio.grid(row=0, column=1, padx=5)
+        self.entry_fecha_inicio.insert(0, datetime.now().strftime("%Y-%m-%d"))
+
+        tk.Label(frame_fechas, text="Fecha fin:", font=("Arial", 10)).grid(row=0, column=2, padx=5)
+        self.entry_fecha_fin = tk.Entry(frame_fechas, width=12, font=("Arial", 10))
+        self.entry_fecha_fin.grid(row=0, column=3, padx=5)
+        self.entry_fecha_fin.insert(0, datetime.now().strftime("%Y-%m-%d"))
+
+        tk.Label(marco_filtro, text="(Formato: YYYY-MM-DD)",
+                 font=("Arial", 8), fg="gray").pack(pady=(0, 5))
+
+        # Botones
+        marco_botones = tk.Frame(marco_filtro)
+        marco_botones.pack(pady=5)
+
+        tk.Button(marco_botones, text="Buscar disponibles", width=18,
+                  command=self._cargar_tabla).grid(row=0, column=0, padx=5)
+        tk.Button(marco_botones, text="Mostrar todos disponibles", width=20,
+                  command=self._cargar_todos).grid(row=0, column=1, padx=5)
+
+        # Tabla
         marco_tabla = tk.Frame(self.root)
         marco_tabla.pack(fill="both", expand=True, padx=15, pady=5)
 
@@ -305,8 +331,8 @@ class VentanaVehiculosDisponibles:
         self.tabla = ttk.Treeview(marco_tabla, columns=columnas,
                                   show="headings", height=12)
 
-        encabezados = ("Marca", "Tipo", "Placa", "Transmisión",
-                       "Combustible", "Color", "Pasajeros", "Maletas", "Costo/día")
+        encabezados = ("Marca", "Tipo", "Placa", "Transmision",
+                       "Combustible", "Color", "Pasajeros", "Maletas", "Costo/dia")
         anchos = (80, 70, 80, 90, 80, 70, 70, 65, 80)
         for col, enc, ancho in zip(columnas, encabezados, anchos):
             self.tabla.heading(col, text=enc)
@@ -319,6 +345,69 @@ class VentanaVehiculosDisponibles:
         scroll.pack(side="right", fill="y")
 
     def _cargar_tabla(self):
+        """Carga los vehiculos disponibles en el rango de fechas seleccionado."""
+        try:
+            fecha_inicio_str = self.entry_fecha_inicio.get().strip()
+            fecha_fin_str = self.entry_fecha_fin.get().strip()
+
+            if not fecha_inicio_str or not fecha_fin_str:
+                messagebox.showwarning("Atencion", "Complete ambas fechas.")
+                return
+
+            # Validar formato de fechas
+            try:
+                fecha_inicio = datetime.strptime(fecha_inicio_str, "%Y-%m-%d").date()
+                fecha_fin = datetime.strptime(fecha_fin_str, "%Y-%m-%d").date()
+            except ValueError:
+                messagebox.showerror("Error", "Formato de fecha invalido. Use YYYY-MM-DD")
+                return
+
+            # Validar que la fecha fin no sea menor a la fecha inicio
+            if fecha_fin < fecha_inicio:
+                messagebox.showwarning("Atencion", "La fecha fin no puede ser menor a la fecha inicio.")
+                return
+
+            # Validar que no sean fechas pasadas
+            hoy = datetime.now().date()
+            if fecha_inicio < hoy:
+                messagebox.showwarning("Atencion", "La fecha de inicio no puede ser anterior a hoy.")
+                return
+
+            # Limpiar tabla
+            for fila in self.tabla.get_children():
+                self.tabla.delete(fila)
+
+            # Obtener todos los vehiculos disponibles
+            todos_vehiculos = vehiculo_logica.obtener_vehiculos_disponibles()
+
+            # Filtrar por disponibilidad en el rango de fechas
+            vehiculos_filtrados = []
+            for v in todos_vehiculos:
+                id_vehiculo = v.get("id_vehiculo")
+                # Verificar si el vehiculo esta disponible en el rango de fechas
+                if alquiler_logica.verificar_disponibilidad_vehiculo(id_vehiculo, fecha_inicio_str, fecha_fin_str):
+                    vehiculos_filtrados.append(v)
+
+            if not vehiculos_filtrados:
+                messagebox.showinfo("Sin resultados",
+                                    f"No hay vehiculos disponibles del {fecha_inicio_str} al {fecha_fin_str}.")
+                return
+
+            # Mostrar vehiculos filtrados
+            for v in vehiculos_filtrados:
+                self.tabla.insert("", "end", values=(
+                    v.get("marca"),              v.get("tipo"),
+                    v.get("placa"),              v.get("transmision"),
+                    v.get("combustible"),        v.get("color"),
+                    v.get("cantidad_pasajeros"), v.get("cantidad_maletas"),
+                    v.get("costo_diario")
+                ))
+
+        except Exception as e:
+            messagebox.showerror("Error", f"Error al buscar vehiculos: {str(e)}")
+
+    def _cargar_todos(self):
+        """Muestra todos los vehiculos disponibles sin filtro de fechas."""
         for fila in self.tabla.get_children():
             self.tabla.delete(fila)
         for v in vehiculo_logica.obtener_vehiculos_disponibles():
@@ -331,7 +420,7 @@ class VentanaVehiculosDisponibles:
             ))
 
 
-# ── Punto de entrada temporal ────────────
+# Punto de entrada temporal
 if __name__ == "__main__":
     root = tk.Tk()
     app = VentanaVehiculos(root)

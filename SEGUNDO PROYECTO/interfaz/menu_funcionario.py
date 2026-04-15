@@ -3,21 +3,21 @@ from tkinter import messagebox
 
 
 class MenuFuncionario:
-    """Ventana principal del menú para funcionarios."""
+    """Ventana principal del menu para funcionarios."""
 
     def __init__(self, root):
         self.root = root
-        self.root.title("AutoTrust S.A. - Menú Funcionario")
-        self.root.geometry("400x500")
+        self.root.title("AutoTrust S.A. - Menu Funcionario")
+        self.root.geometry("400x580")
         self.root.resizable(False, False)
 
         self._construir_interfaz()
 
     def _construir_interfaz(self):
-        # Título
+        # Titulo
         tk.Label(self.root, text="AutoTrust S.A.",
                  font=("Arial", 18, "bold")).pack(pady=(20, 5))
-        tk.Label(self.root, text="Menú Funcionario",
+        tk.Label(self.root, text="Menu Funcionario",
                  font=("Arial", 12)).pack(pady=(0, 20))
 
         # Marco de botones
@@ -27,7 +27,7 @@ class MenuFuncionario:
         botones = [
             ("Clientes",      self.abrir_clientes),
             ("Funcionarios",  self.abrir_funcionarios),
-            ("Vehículos",     self.abrir_vehiculos),
+            ("Vehiculos",     self.abrir_vehiculos),
             ("Alquileres",    self.abrir_alquileres),
             ("Devoluciones",  self.abrir_devoluciones),
             ("Reportes",      self.abrir_reportes),
@@ -38,12 +38,11 @@ class MenuFuncionario:
             tk.Button(marco, text=texto, width=25, height=2,
                       command=comando).pack(pady=5)
 
-        # Botón cerrar sesión abajo
-        tk.Button(self.root, text="Cerrar sesión", width=25,
+        # Boton cerrar sesion abajo
+        tk.Button(self.root, text="Cerrar sesion", width=25,
                   command=self.cerrar_sesion).pack(pady=(15, 0))
 
-    # ── Navegación ─────────────────
-
+    # Navegacion
     def abrir_clientes(self):
         from interfaz.clientes import VentanaClientes
         VentanaClientes(tk.Toplevel(self.root))
@@ -71,17 +70,17 @@ class MenuFuncionario:
     def abrir_acerca_de(self):
         messagebox.showinfo(
             "Acerca de",
-            "AutoTrust S.A.\nSistema de Alquiler de Vehículos\n\n"
+            "AutoTrust S.A.\nSistema de Alquiler de Vehiculos\n\n"
             "Desarrollado por:\nJean Carlo Navarro\nSamuel Brenes\n\n"
-            "Programación III - I Cuatrimestre 2026"
+            "Programacion III - I Cuatrimestre 2026"
         )
 
     def cerrar_sesion(self):
-        if messagebox.askyesno("Cerrar sesión", "¿Desea cerrar sesión?"):
+        if messagebox.askyesno("Cerrar sesion", "Desea cerrar sesion?"):
             self.root.destroy()
 
 
-# ── Punto de entrada temporal
+# Punto de entrada temporal
 if __name__ == "__main__":
     root = tk.Tk()
     app = MenuFuncionario(root)
